@@ -1,193 +1,228 @@
-import random as r
-import pickle as p
-import os.path as o
+#Information
+"""
+Kelompok 14 - ATM
+1. 
+2. 
+3.
+4. 
+"""
 
-def get_all_accounts():
-    if o.isfile("Accounts.bat"):            
-        read_file=open("Accounts.bat","rb")
-        Accounts=p.load(read_file)
+#Kamus dan Variabel
+"""
+Data variabel
+- Akuns = Bentuk jamak dari akun (kumpulan akun)
+
+Admin variabel
+- semua_akuns = 
+- 
+
+Nasabah variabel
+
+
+"""
+
+#Intensi ATM
+
+#Management dan Aturan
+
+
+import random
+import pickle
+import os.path
+import sys
+
+def semua_akuns():
+    if os.path.isfile("Akuns.bat"):            
+        read_file=open("Akuns.bat","rb")
+        Akuns=pickle.load(read_file)
         read_file.close()
-        return Accounts
+        return Akuns
     else:
-        print("Data Not Available")
+        print("Data tidak tersedia")
         return {}
 
-def display_account(Act):
-    print("-"*80)
-    print("Holder Name:",Act[0])
-    print("Phone:",Act[1])
-    print("Address:",Act[2])
-    print("Gender:",Act[3])
-    print("Password:",Act[4])
-    print("Balance:",Act[5])
-    print("-"*80)
+def tampil_akun(Act):
+    print("_"*50)
+    print("Nama Nasabah:",Act[0])
+    print("Nomor Telepon:",Act[1])
+    print("Alamat:",Act[2])
+    print("Jenis Kelamin:",Act[3])
+    print("PIN:",Act[4])
+    print("Saldo:",Act[5])
+    print("_"*50)
 
-def write_accounts(Accounts):
-    write_file=open("Accounts.bat","wb")
-    p.dump(Accounts,write_file)
+def write_Akuns(Akuns):
+    write_file=open("Akuns.bat","wb")
+    pickle.dump(Akuns,write_file)
     write_file.close()
 
-def add_account():
-    Accounts=get_all_accounts()
-    ac_no=input("Enter Account Number:")
-    if ac_no in Accounts.keys():
-        print("This Account Number already exists")
-        return
-    name=input("Enter Account Holder Name:")
-    phone=input("Enter Phone Number:")
-    address=input("Enter Address:")
-    gender=input("Enter gender:")
-    password=r.randint(100000,1000000)
-    balance=0
+def tambah_akun():
+    Akuns=semua_akuns()
+    nomor_akun=random.randint(10000000,100000000)
+    name=input("Masukkan Nama Nasabah: ")
+    nomor_telepon=input("Masukkan Nomor Telepon: ")
+    alamat=input("Masukkan Alamat: ")
+    jenis_kelamin=input("Masukkan Jenis Kelamin: ")
+    PIN=random.randint(100000,1000000)
+    saldo=0
 
-    Accounts[ac_no]=[name,phone,address,gender,password,balance]
+    Akuns[nomor_akun]=[name,nomor_telepon,alamat,jenis_kelamin,PIN,saldo]
 
-    write_accounts(Accounts)
-    print("Account Has Been Created")
+    write_Akuns(Akuns)
+    print("Akun berhasil dibuat")
  
 
-def remove_account():
-    Accounts=get_all_accounts()
-    ac_no=input("Enter Account Number:")
-    if ac_no in Accounts.keys():
-        del Accounts[ac_no]
-        print("Account Has Been Deleted")
-        write_accounts(Accounts)
+def hapus_akun():
+    Akuns=semua_akuns()
+    nomor_akun=input("Masukkan Nomor Akun:")
+    if nomor_akun in Akuns.keys():
+        del Akuns[nomor_akun]
+        print("Akun sudah dihapus")
+        write_Akuns(Akuns)
     else:
-        print("Account Doesn't Exists")
+        print("Akun tidak tersedia")
         
-
-def edit_account():
-    Accounts=get_all_accounts()
-    ac_no=input("Enter Account Number:")
-    if ac_no in Accounts.keys():
-        display_account(Accounts[ac_no])
-        print("What do you want to change:")
-        print("0.Holder Name")
-        print("1.Phone")
-        print("2.Address")
-        print("3.Gender")
-        choice=int(input())
-        if choice>=0 and choice<4:
-            v=input("Enter New Value:")
+def ubah_akun():
+    Akuns=semua_akuns()
+    nomor_akun=input("Masukkan Nomor Akun:")
+    if nomor_akun in Akuns.keys():
+        tampil_akun(Akuns[nomor_akun])
+        print("Apa yang ingin Anda ubah:")
+        print("0.Nama Nasabah")
+        print("1.Nomor Telepon")
+        print("2.Alamat")
+        print("3.Jenis Kelamin")
+        pilihan=int(input())
+        if pilihan>=0 and pilihan<4:
+            v=input("Masukkan New Value:")
             if v!="":
-                Accounts[ac_no][choice]=v
-                write_accounts(Accounts)
-                print("Account Has Been Updated")
+                Akuns[nomor_akun][pilihan]=v
+                write_Akuns(Akuns)
+                print("Akun berhasil diperbaharui")
             else:
                 print("Try Again..")
         else:
-            print("Wrong Choice")
+            print("Salah Pilihan")
     else:
-        print("Account Doesn't Exists")
+        print("Akun tidak tersedia")
 
-def display_all_account():
-    Accounts=get_all_accounts()
-    print("-"*80)
-    print("Account Table".center(80))
-    print("-"*80)
-    for account in Accounts:
-        print(account,Accounts[account])
+def tampil_semua_akun():
+    Akuns=semua_akuns()
+    print("$"*50)
+    print("Tabel Akun".center(50))
+    print("$"*50)
+    for akun in Akuns:
+        print(akun,Akuns[akun])
         
-
-
-def search_account():
-    Accounts=get_all_accounts()
-    ac_no=input("Enter Account Number:")
-    if ac_no in Accounts.keys():
-        display_account(Accounts[ac_no])
+def cari_akun():
+    Akuns=semua_akuns()
+    nomor_akun=input("Masukkan Nomor Akun:")
+    if nomor_akun in Akuns.keys():
+        tampil_akun(Akuns[nomor_akun])
     else:
-        print("Account Doesn't Exists")
-
-
+        print("Akun tidak tersedia")
 
 def admin_menu():
-    print("-"*80)
-    print("Admin Panel".center(80))
-    print("-"*80)
-    print("1.Add New Account")
-    print("2.Remove Account")
-    print("3.Edit Account")
-    print("4.Display All Accounts")
-    print("5.Search Account")
-    print("0.Exit")
+    print("$"*50)
+    print("Dashboard Admin".center(50))
+    print("$"*50)
+    print("1.Tambah Akun")
+    print("2.Hapus Akun")
+    print("3.Ubah Akun")
+    print("4.Tampilkan Semua Akun")
+    print("5.Cari Akun")
+    print("0.keluar")
     
-    choice=int(input("Select:"))
-    if choice==1:add_account()
-    elif choice==2:remove_account()
-    elif choice==3:edit_account()
-    elif choice==4:display_all_account()
-    elif choice==5:search_account()
-    elif choice==0:exit()
+    pilihan=int(input("Select:"))
+    if pilihan==1:tambah_akun()
+    elif pilihan==2:hapus_akun()
+    elif pilihan==3:ubah_akun()
+    elif pilihan==4:tampil_semua_akun()
+    elif pilihan==5:cari_akun()
+    elif pilihan==0:keluar()
 
-    input("Continue...")
+    input("lanjut...")
     admin_menu()
 
-def deposit_cash(act_no):
-    Accounts=get_all_accounts()
-    amount=int(input("Enter Amount For Deposit:"))
-    Accounts[act_no][5]=int(Accounts[act_no][5])+amount
-    write_accounts(Accounts)
-    print("Amount Deposited")
+def setor_tunai(no_rekening):
+    Akuns=semua_akuns()
+    amount=int(input("Masukkan Jumlah Setor Tunai: "))
+    Akuns[no_rekening][5]=int(Akuns[no_rekening][5])+amount
+    write_Akuns(Akuns)
+    print("Uang berhasil disetor")
     
 
-def withdraw_cash(act_no):
-    Accounts=get_all_accounts()
-    amount=int(input("Enter Amount For Withdraw:"))
-    if(Accounts[act_no][5]>amount):
-        Accounts[act_no][5]=int(Accounts[act_no][5])-amount
-        print("Amount Withdraw.")
-        write_accounts(Accounts)
+def tarik_tunai(no_rekening):
+    Akuns=semua_akuns()
+    amount=int(input("Masukkan Jumlah Tarik Tunai: "))
+    if(Akuns[no_rekening][5]>amount):
+        Akuns[no_rekening][5]=int(Akuns[no_rekening][5])-amount
+        print("Tarik tunai berhasil.")
+        write_Akuns(Akuns)
     else:
-        print("Can not Withdraw.")
+        print("Tidak bisa tarik tunai")
 
-def check_balance(act_no):
-    Accounts=get_all_accounts()
-    print("Balance:Rs.",Accounts[act_no][5])
+def cek_saldo(no_rekening):
+    Akuns=semua_akuns()
+    print("Saldo: Rp.",Akuns[no_rekening][5])
 
+def menu_nasabah(no_rekening):
+    print("$"*50)
+    print("Dashboard Nasabah".center(50))
+    print("$"*50)
+    print("1.Setor Tunai")
+    print("2.Tarik Tunai")
+    print("3.Cek Saldo")
+    print("0.keluar")
+    pilihan=int(input("Select:"))
+    if pilihan==1:setor_tunai(no_rekening)
+    elif pilihan==2:tarik_tunai(no_rekening)
+    elif pilihan==3:cek_saldo(no_rekening)
+    elif pilihan==0:keluar()
+    input("Lanjut...")
+    menu_nasabah(no_rekening)
+    
+def keluar():
+    main_menu()
 
-
-def customer_menu(act_no):
-    print("-"*80)
-    print("Customer Panel".center(80))
-    print("-"*80)
-    print("1.Deposit Cash")
-    print("2.Withdraw Cash")
-    print("3.Check Balance")
-    print("0.Exit")
-    choice=int(input("Select:"))
-    if choice==1:deposit_cash(act_no)
-    elif choice==2:withdraw_cash(act_no)
-    elif choice==3:check_balance(act_no)
-    elif choice==0:exit()
-    input("Continue...")
-    customer_menu(act_no)
-
+def batal():
+    sys.exit()
 
 def main_menu():
-    print("-"*80)
-    print("Banking System".center(80))
-    print("-"*80)
-    print("1.Admin Login\n2.Customer Login")
-    choice=int(input("Select:"))
-    if choice==1:
-        admin_id=input("Enter Admin Id:")
-        password=input("Enter Admin Password:")
-        if admin_id=="Ishim" and password=="1234":
+    print("$"*50)
+    print("Sistem Bank".center(50))
+    print("$"*50)
+    print("1.Login Admin\n2.Login Nasabah\n3.Batal")
+    pilihan=int(input("Select: "))
+    if pilihan==1:
+        admin_id=input("Masukkan Admin Id:")
+        PIN=input("Masukkan Admin PIN:")
+        if admin_id=="Matin" and PIN=="1414141414":
+            admin_menu()
+        elif admin_id=="Dzakiy" and PIN=="1414141414":
+            admin_menu()
+        elif admin_id=="Revalina" and PIN=="1414141414":
+            admin_menu()
+        elif admin_id=="Lenny" and PIN=="1414141414":
             admin_menu()
         else:
-            print("Id/Password not mateched")
-    elif choice==2:
-        Accounts=get_all_accounts()
-        act_no=input("Enter Account Number:")
-        if act_no in Accounts.keys():
-            password=int(input("Enter Account Password:"))
-            if Accounts[act_no][4]==password:
-                customer_menu(act_no)
+            print("id/PIN tidak sesuai")
+    elif pilihan==2:
+        Akuns=semua_akuns()
+        no_rekening=input("Masukkan Nomor Akun:")
+        if no_rekening in Akuns.keys():
+            PIN=int(input("Masukkan PIN:"))
+            if Akuns[no_rekening][4]==PIN:
+                menu_nasabah(no_rekening)
             else:
-                print("Password does not matched")
+                print("PIN tidak sesuai")
         else:
-            print("Account not available")
+            print("Akun tidak tersedia")
+    elif pilihan==3:
+        batal()
+    else:
+        print("Gagal. Tidak sesuai pilihan")
+        main_menu()
 
 
 main_menu()
